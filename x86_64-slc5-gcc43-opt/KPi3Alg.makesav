@@ -1,0 +1,301 @@
+#-- start of make_header -----------------
+
+#====================================
+#  Library KPi3Alg
+#
+#   Generated Wed Jul 25 14:29:13 2018  by songyx
+#
+#====================================
+
+include ${CMTROOT}/src/Makefile.core
+
+ifdef tag
+CMTEXTRATAGS = $(tag)
+else
+tag       = $(CMTCONFIG)
+endif
+
+cmt_KPi3Alg_has_no_target_tag = 1
+
+#--------------------------------------------------------
+
+ifdef cmt_KPi3Alg_has_target_tag
+
+tags      = $(tag),$(CMTEXTRATAGS),target_KPi3Alg
+
+KPi3Alg_tag = $(tag)
+
+ifdef READONLY
+cmt_local_tagfile_KPi3Alg = /tmp/CMT_$(KPi3Alg_tag)_KPi3Alg.make$(cmt_lock_pid)
+else
+#cmt_local_tagfile_KPi3Alg = $(KPi3Alg_tag)_KPi3Alg.make
+cmt_local_tagfile_KPi3Alg = $(bin)$(KPi3Alg_tag)_KPi3Alg.make
+endif
+
+else
+
+tags      = $(tag),$(CMTEXTRATAGS)
+
+KPi3Alg_tag = $(tag)
+
+ifdef READONLY
+cmt_local_tagfile_KPi3Alg = /tmp/CMT_$(KPi3Alg_tag).make$(cmt_lock_pid)
+else
+#cmt_local_tagfile_KPi3Alg = $(KPi3Alg_tag).make
+cmt_local_tagfile_KPi3Alg = $(bin)$(KPi3Alg_tag).make
+endif
+
+endif
+
+-include $(cmt_local_tagfile_KPi3Alg)
+
+ifdef cmt_KPi3Alg_has_target_tag
+
+ifdef READONLY
+cmt_final_setup_KPi3Alg = /tmp/CMT_KPi3Alg_KPi3Algsetup.make
+cmt_local_KPi3Alg_makefile = /tmp/CMT_KPi3Alg$(cmt_lock_pid).make
+else
+cmt_final_setup_KPi3Alg = $(bin)KPi3Alg_KPi3Algsetup.make
+cmt_local_KPi3Alg_makefile = $(bin)KPi3Alg.make
+endif
+
+else
+
+ifdef READONLY
+cmt_final_setup_KPi3Alg = /tmp/CMT_KPi3Algsetup.make
+cmt_local_KPi3Alg_makefile = /tmp/CMT_KPi3Alg$(cmt_lock_pid).make
+else
+cmt_final_setup_KPi3Alg = $(bin)KPi3Algsetup.make
+cmt_local_KPi3Alg_makefile = $(bin)KPi3Alg.make
+endif
+
+endif
+
+ifdef READONLY
+cmt_final_setup = /tmp/CMT_KPi3Algsetup.make
+else
+cmt_final_setup = $(bin)KPi3Algsetup.make
+endif
+
+KPi3Alg ::
+
+
+ifdef READONLY
+KPi3Alg ::
+	@echo tags=$(tags)
+	@echo cmt_local_tagfile=$(cmt_local_tagfile)
+endif
+
+
+dirs ::
+	@if test ! -r requirements ; then echo "No requirements file" ; fi; \
+	  if test ! -d $(bin) ; then $(mkdir) -p $(bin) ; fi
+
+javadirs ::
+	@if test ! -d $(javabin) ; then $(mkdir) -p $(javabin) ; fi
+
+srcdirs ::
+	@if test ! -d $(src) ; then $(mkdir) -p $(src) ; fi
+
+help ::
+	$(echo) 'KPi3Alg'
+
+binobj = 
+ifdef STRUCTURED_OUTPUT
+binobj = KPi3Alg/
+KPi3Alg::
+	@if test ! -d $(bin)$(binobj) ; then $(mkdir) -p $(bin)$(binobj) ; fi
+	$(echo) "STRUCTURED_OUTPUT="$(bin)$(binobj)
+endif
+
+#-- end of make_header ------------------
+
+#-- start of libary_header ---------------
+
+KPi3Alglibname   = $(bin)$(library_prefix)KPi3Alg$(library_suffix)
+KPi3Alglib       = $(KPi3Alglibname).a
+KPi3Algstamp     = $(bin)KPi3Alg.stamp
+KPi3Algshstamp   = $(bin)KPi3Alg.shstamp
+
+KPi3Alg :: dirs  KPi3AlgLIB
+	$(echo) "KPi3Alg ok"
+
+#-- end of libary_header ----------------
+
+KPi3AlgLIB :: $(KPi3Alglib) $(KPi3Algshstamp)
+	@/bin/echo "------> KPi3Alg : library ok"
+
+$(KPi3Alglib) :: $(bin)KPi3.o $(bin)KPi3_entries.o $(bin)KPi3_load.o
+	$(lib_echo) library
+	$(lib_silent) cd $(bin); \
+	  $(ar) $(KPi3Alglib) $?
+	$(lib_silent) $(ranlib) $(KPi3Alglib)
+	$(lib_silent) cat /dev/null >$(KPi3Algstamp)
+
+#------------------------------------------------------------------
+#  Future improvement? to empty the object files after
+#  storing in the library
+#
+##	  for f in $?; do \
+##	    rm $${f}; touch $${f}; \
+##	  done
+#------------------------------------------------------------------
+
+$(KPi3Alglibname).$(shlibsuffix) :: $(KPi3Alglib) $(KPi3Algstamps)
+	$(lib_silent) cd $(bin); QUIET=$(QUIET); $(make_shlib) "$(tags)" KPi3Alg $(KPi3Alg_shlibflags)
+
+$(KPi3Algshstamp) :: $(KPi3Alglibname).$(shlibsuffix)
+	@if test -f $(KPi3Alglibname).$(shlibsuffix) ; then cat /dev/null >$(KPi3Algshstamp) ; fi
+
+KPi3Algclean ::
+	$(cleanup_echo) objects
+	$(cleanup_silent) cd $(bin); /bin/rm -f $(bin)KPi3.o $(bin)KPi3_entries.o $(bin)KPi3_load.o
+
+#-----------------------------------------------------------------
+#
+#  New section for automatic installation
+#
+#-----------------------------------------------------------------
+
+ifeq ($(INSTALLAREA),)
+installarea = $(CMTINSTALLAREA)
+else
+ifeq ($(findstring `,$(INSTALLAREA)),`)
+installarea = $(shell $(subst `,, $(INSTALLAREA)))
+else
+installarea = $(INSTALLAREA)
+endif
+endif
+
+install_dir = ${installarea}/${CMTCONFIG}/lib
+KPi3Alginstallname = $(library_prefix)KPi3Alg$(library_suffix).$(shlibsuffix)
+
+KPi3Alg :: KPi3Alginstall
+
+install :: KPi3Alginstall
+
+KPi3Alginstall :: $(install_dir)/$(KPi3Alginstallname)
+	@if test ! "${installarea}" = ""; then\
+	  echo "installation done"; \
+	fi
+
+$(install_dir)/$(KPi3Alginstallname) :: $(bin)$(KPi3Alginstallname)
+	@if test ! "${installarea}" = ""; then \
+	  cd $(bin); \
+	  if test ! "$(install_dir)" = ""; then \
+	    if test ! -d "$(install_dir)"; then \
+	      mkdir -p $(install_dir); \
+	    fi ; \
+	    if test -d "$(install_dir)"; then \
+	      echo "Installing library $(KPi3Alginstallname) into $(install_dir)"; \
+	      if test -e $(install_dir)/$(KPi3Alginstallname); then \
+	        $(cmt_uninstall_area_command) $(install_dir)/$(KPi3Alginstallname); \
+	        $(cmt_uninstall_area_command) $(install_dir)/$(KPi3Alginstallname).cmtref; \
+	      fi; \
+	      $(cmt_install_area_command) `pwd`/$(KPi3Alginstallname) $(install_dir)/$(KPi3Alginstallname); \
+	      echo `pwd`/$(KPi3Alginstallname) >$(install_dir)/$(KPi3Alginstallname).cmtref; \
+	    fi \
+          else \
+	    echo "Cannot install library $(KPi3Alginstallname), no installation directory specified"; \
+	  fi; \
+	fi
+
+KPi3Algclean :: KPi3Alguninstall
+
+uninstall :: KPi3Alguninstall
+
+KPi3Alguninstall ::
+	@if test ! "${installarea}" = ""; then \
+	  cd $(bin); \
+	  if test ! "$(install_dir)" = ""; then \
+	    if test -d "$(install_dir)"; then \
+	      echo "Removing installed library $(KPi3Alginstallname) from $(install_dir)"; \
+	      $(cmt_uninstall_area_command) $(install_dir)/$(KPi3Alginstallname); \
+	      $(cmt_uninstall_area_command) $(install_dir)/$(KPi3Alginstallname).cmtref; \
+	    fi \
+          else \
+	    echo "Cannot uninstall library $(KPi3Alginstallname), no installation directory specified"; \
+	  fi; \
+	fi
+
+
+
+
+#-- start of dependency ------------------
+ifneq ($(MAKECMDGOALS),KPi3Algclean)
+
+#$(bin)KPi3Alg_dependencies.make :: dirs
+
+ifndef QUICK
+$(bin)KPi3Alg_dependencies.make : ../src/KPi3.cxx ../src/components/KPi3_entries.cxx ../src/components/KPi3_load.cxx $(use_requirements) $(cmt_final_setup_KPi3Alg)
+	$(echo) "(KPi3Alg.make) Rebuilding $@"; \
+	  $(build_dependencies) KPi3Alg -all_sources -out=$@ ../src/KPi3.cxx ../src/components/KPi3_entries.cxx ../src/components/KPi3_load.cxx
+endif
+
+#$(KPi3Alg_dependencies)
+
+-include $(bin)KPi3Alg_dependencies.make
+
+endif
+#-- end of dependency -------------------
+#-- start of cpp_library -----------------
+
+$(bin)KPi3Alg_dependencies.make : $(KPi3_cxx_dependencies)
+
+$(bin)$(binobj)KPi3.o : $(KPi3_cxx_dependencies)
+	$(cpp_echo) $(src)KPi3.cxx
+	$(cpp_silent) $(cppcomp) -o $(@) $(use_pp_cppflags) $(KPi3Alg_pp_cppflags) $(lib_KPi3Alg_pp_cppflags) $(KPi3_pp_cppflags) $(use_cppflags) $(KPi3Alg_cppflags) $(lib_KPi3Alg_cppflags) $(KPi3_cppflags) $(KPi3_cxx_cppflags)  $(src)KPi3.cxx
+
+#-- end of cpp_library ------------------
+#-- start of cpp_library -----------------
+
+$(bin)KPi3Alg_dependencies.make : $(KPi3_entries_cxx_dependencies)
+
+$(bin)$(binobj)KPi3_entries.o : $(KPi3_entries_cxx_dependencies)
+	$(cpp_echo) $(src)components/KPi3_entries.cxx
+	$(cpp_silent) $(cppcomp) -o $(@) $(use_pp_cppflags) $(KPi3Alg_pp_cppflags) $(lib_KPi3Alg_pp_cppflags) $(KPi3_entries_pp_cppflags) $(use_cppflags) $(KPi3Alg_cppflags) $(lib_KPi3Alg_cppflags) $(KPi3_entries_cppflags) $(KPi3_entries_cxx_cppflags) -I../src/components $(src)components/KPi3_entries.cxx
+
+#-- end of cpp_library ------------------
+#-- start of cpp_library -----------------
+
+$(bin)KPi3Alg_dependencies.make : $(KPi3_load_cxx_dependencies)
+
+$(bin)$(binobj)KPi3_load.o : $(KPi3_load_cxx_dependencies)
+	$(cpp_echo) $(src)components/KPi3_load.cxx
+	$(cpp_silent) $(cppcomp) -o $(@) $(use_pp_cppflags) $(KPi3Alg_pp_cppflags) $(lib_KPi3Alg_pp_cppflags) $(KPi3_load_pp_cppflags) $(use_cppflags) $(KPi3Alg_cppflags) $(lib_KPi3Alg_cppflags) $(KPi3_load_cppflags) $(KPi3_load_cxx_cppflags) -I../src/components $(src)components/KPi3_load.cxx
+
+#-- end of cpp_library ------------------
+#-- start of cleanup_header --------------
+
+clean :: KPi3Algclean
+	@cd .
+
+ifndef PEDANTIC
+.DEFAULT::
+	$(echo) "(KPi3Alg.make) $@: No rule for such target" >&2
+#	@echo "#CMT> Warning: $@: No rule for such target" >&2; exit
+else
+.DEFAULT::
+	$(echo) "(KPi3Alg.make) PEDANTIC: $@: No rule for such target" >&2
+	if test $@ = "$(cmt_final_setup)" -o\
+	 $@ = "$(cmt_final_setup_KPi3Alg)" ; then\
+	 found=n; for s in 1 2 3 4 5; do\
+	 sleep $$s; test ! -f $@ || { found=y; break; }\
+	 done; if test $$found = n; then\
+	 test -z "$(cmtmsg)" ||\
+	 echo "$(CMTMSGPREFIX)" "(KPi3Alg.make) PEDANTIC: $@: Seems to be missing. Ignore it for now" >&2; exit 0 ; fi;\
+	 elif test `expr index $@ '/'` -ne 0 ; then\
+	 test -z "$(cmtmsg)" ||\
+	 echo "$(CMTMSGPREFIX)" "(KPi3Alg.make) PEDANTIC: $@: Seems to be a missing file. Please check" >&2; exit 2 ; \
+	 else\
+	 test -z "$(cmtmsg)" ||\
+	 echo "$(CMTMSGPREFIX)" "(KPi3Alg.make) PEDANTIC: $@: Seems to be a fake target due to some pattern. Just ignore it" >&2 ; exit 0; fi
+endif
+
+KPi3Algclean ::
+#-- end of cleanup_header ---------------
+#-- start of cleanup_library -------------
+	$(cleanup_echo) library
+	-$(cleanup_silent) cd $(bin); /bin/rm -f $(binobj)$(library_prefix)KPi3Alg$(library_suffix).a $(binobj)$(library_prefix)KPi3Alg$(library_suffix).s? $(binobj)KPi3Alg.stamp $(binobj)KPi3Alg.shstamp
+#-- end of cleanup_library ---------------
+
